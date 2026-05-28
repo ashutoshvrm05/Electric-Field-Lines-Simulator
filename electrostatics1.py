@@ -47,9 +47,9 @@ class Charge():
 
 class Field():
 
-    def __init__(self, charges, screen_size):
+    def __init__(self, charges, screen_size, lines_per_charge=6):
         self.charges = charges
-        self.angles = np.linspace(0, 2*np.pi, num=9)
+        self.angles = np.linspace(0, 2*np.pi, num=lines_per_charge+1)
         self.width = screen_size[0]
         self.height = screen_size[1]
 
@@ -163,14 +163,14 @@ def main():
     pygame.display.set_caption("Electrostatics Simulation")
     font = pygame.font.SysFont('couriernew, consolas, monospace', 15, bold=True)
     clock = pygame.time.Clock()
-
     running = True
 
     # initial charge
     c = Charge((300, 300), 40)
-    
     charges = [c]
-    field = Field(charges, (800, 800))
+
+    lines_per_charge = 8
+    field = Field(charges=charges, screen_size=(WIDTH, HEIGHT), lines_per_charge=lines_per_charge)
 
     lmouse_down = False
     rmouse_down = False
