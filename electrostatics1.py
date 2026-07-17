@@ -132,7 +132,7 @@ class Field():
         curr_x = x
         curr_y = y
 
-        # an upper bound to steps ensure that the loop doesn't get stuck between a equilibrium point, and run back and forth infinitely
+        # an upper bound to step
         steps = 0
         max_steps = 2000
 
@@ -140,7 +140,7 @@ class Field():
         while(curr_x < self.width and curr_y < self.height and curr_x > 0 and curr_y > 0 and steps < max_steps):
             steps += 1
 
-            # to check if the line hits a charge, because then the field will become infinite (1/0 while calculating field in the next step)
+            # to check if the line hits a charge
             hit_charge = False
             curr_p = Vector(curr_x, curr_y)
             for charge in self.charges:
@@ -153,11 +153,9 @@ class Field():
 
             # net field at current pos (curr_x, curr_y)
             curr_f = self.calculate_field(curr_x, curr_y)
-            # break loop if the field is too week
             if abs(curr_f) <= 0.00001:
                 break           
             
-            # init vector in the direction of net field
             curr_fu = curr_f.normalize()
             if reverse:
                 # for negative charges, the lines are integrated in the opposite dirn to the field vector
@@ -277,7 +275,7 @@ class Equipotential():
         return grid
 
     def interpolate(self, x1, y1, val1, x2, y2, val2, target_val):
-        """Linearly interpolates the exact coordinate where the edge crosses target_val."""
+        # Linearly interpolates the exact coordinate where the edge crosses target_val
         if val1 == val2:
             return (x1, y1)
         t = (target_val - val1) / (val2 - val1)
@@ -285,16 +283,13 @@ class Equipotential():
         return (x1 + t * (x2 - x1), y1 + t * (y2 - y1))
 
     def draw(self, screen):
-        # 1. Compute potential at all grid intersections
+        
         grid = self.calculate_potential_grid()
         cs = self.cell_size
 
-        # 2. Iterate through target potential levels (ΔV)
         for val in self.levels:
-            # Choose color: red/orange for positive potential, cyan/blue for negative
             color = (255, 100, 50) if val > 0 else (50, 180, 255)
 
-            # 3. Marching Squares: evaluate each cell
             for r in range(self.rows - 1):
                 for c in range(self.cols - 1):
                     # Corner potentials of the current cell
